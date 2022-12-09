@@ -12,7 +12,8 @@ router.post('/signup', (req, res, next) => {
 
   User
     .create({ email, password, username })
-    .then(createdUser => {
+    .then((createdUser) => {
+
       const { email, username, _id } = createdUser
       const user = { email, username, _id }
 
@@ -20,7 +21,6 @@ router.post('/signup', (req, res, next) => {
     })
     .catch(err => next(err))
 })
-
 
 
 
@@ -40,7 +40,7 @@ router.post('/login', (req, res, next) => {
         res.status(200).json({ authToken: foundUser.signToken() })
       }
       else {
-        res.status(401).json({ errorMessages: ['Usuario o contraseña incorrectos'] })
+        res.status(401).json({ messages: ['Usuario o contraseña incorrectos'] })
       }
     })
     .catch(err => next(err))
