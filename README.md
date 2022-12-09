@@ -62,7 +62,7 @@ userSchema.pre('save', function (next) {
 
 Es posible extender el modelo a través de su esquema, con métodos adicionales que estarán presentes tanto en el propio modelo como en los objetos retornados por Mongoose.
 
-Ejemplo 1: dotación de capacidad de comparar contraseñas en el modelo
+Ejemplo 1: dotación de capacidad para comparar contraseñas
 
 ````javascript
 // User.model.js
@@ -76,7 +76,7 @@ userSchema.methods.validatePassword = function (candidatePassword) {
 [...]
 ````
 
-Ejemplo 2: dotación de capacidad de generación de tokens en el modelo
+Ejemplo 2: dotación de capacidad para generar tokens
 
 ````javascript
 // User.model.js
