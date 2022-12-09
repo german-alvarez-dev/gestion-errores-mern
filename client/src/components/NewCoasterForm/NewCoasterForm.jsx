@@ -13,7 +13,6 @@ const NewCoasterForm = ({ fireFinalActions }) => {
         inversions: 0,
         imageUrl: ''
     })
-
     const [loadingImage, setLoadingImage] = useState(false)
     const [errors, setErrors] = useState([])
 
