@@ -58,7 +58,7 @@ userSchema.pre('save', function (next) {
 ````
 
 
-# Extensión de métodos de modelo
+# Extensión del esquema de modelo
 
 Es posible extender el modelo a través de su esquema, con métodos adicionales que estarán presentes tanto en el propio modelo como en los objetos retornados por Mongoose.
 
