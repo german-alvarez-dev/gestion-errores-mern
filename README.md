@@ -56,3 +56,77 @@ userSchema.pre('save', function (next) {
   next()
 })
 ````
+
+
+# Extensión de métodos de modelo
+
+Es posible extender el modelo a través de su esquema, con métodos adicionales que estarán presentes tanto en el propio modelo como en los objetos retornados por Mongoose.
+
+Ejemplo 1: dotación de capacidad de comparar contraseñas en el modelo
+
+````javascript
+// User.model.js
+
+[...]
+
+userSchema.methods.validatePassword = function (candidatePassword) {
+  return bcrypt.compareSync(candidatePassword, this.password)
+}
+
+[...]
+````
+
+Ejemplo 2: dotación de capacidad de generación de tokens en el modelo
+
+````javascript
+// User.model.js
+
+[...]
+
+userSchema.methods.signToken = function () {
+  const { _id, username, email } = this
+  const payload = { _id, username, email }
+
+  const authToken = jwt.sign(
+    payload,
+    process.env.TOKEN_SECRET,
+    { algorithm: 'HS256', expiresIn: "6h" }
+  )
+
+  return authToken
+}
+
+[...]
+````
+
+
+Aspecto final de ruta de `login`:
+
+````javascript
+// auth.routes.js
+
+[...]
+
+router.post('/login', (req, res, next) => {
+
+  const { email, password } = req.body
+
+  if (email === '' || password === '') {
+    res.status(400).json({ errorMessages: ['Indica email y contraseña'] })
+    return
+  }
+
+  User
+    .findOne({ email })
+    .then(foundUser => {
+      if (!foundUser || foundUser.validatePassword(password)) {
+        res.status(200).json({ authToken: foundUser.signToken() })
+      }
+      else {
+        res.status(401).json({ messages: ['Usuario o contraseña incorrectos'] })
+      }
+    })
+    .catch(err => next(err))
+})
+
+[...]
