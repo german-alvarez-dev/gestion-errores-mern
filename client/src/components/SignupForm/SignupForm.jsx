@@ -1,6 +1,7 @@
 import { useState, useContext } from "react"
 import { Form, Button } from "react-bootstrap"
 import authService from "../../services/auth.service"
+import ErrorMessage from "../ErrorMessage/ErrorMessage"
 
 import { useNavigate } from 'react-router-dom'
 
@@ -14,6 +15,7 @@ const SignupForm = () => {
         email: '',
         password: ''
     })
+    const [errors, setErrors] = useState([])
 
     const handleInputChange = e => {
         const { value, name } = e.target
@@ -35,7 +37,7 @@ const SignupForm = () => {
                 setToastMessage('Usuario creado correctamente')
                 navigate('/')
             })
-            .catch(err => console.log(err))
+            .catch(err => setErrors(err.response.data.errorMessages))
     }
 
 
@@ -63,6 +65,7 @@ const SignupForm = () => {
                 <Form.Control type="email" value={email} onChange={handleInputChange} name="email" />
             </Form.Group>
 
+            {errors.length ? <ErrorMessage>{errors.map(elm => <p key={elm}>{elm}</p>)}</ErrorMessage> : undefined}
 
             <div className="d-grid">
                 <Button variant="dark" type="submit">Registrarme</Button>
