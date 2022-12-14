@@ -18,7 +18,7 @@ Grabaciones [en este enlace](https://drive.google.com/drive/folders/1vhkkaiN6eKr
     console.error("ERROR", req.method, req.path, err);
 
     if (!res.headersSent) {
-      res.status(500).json({ message: "Internal server error. Check the server console" })
+      res.status(500).json({ errorMessages: ['Se ha producido un error en servidor.'] })
     }
   })
 ````
@@ -119,8 +119,8 @@ router.post('/login', (req, res, next) => {
   User
     .findOne({ email })
     .then(foundUser => {
-      if (!foundUser || foundUser.validatePassword(password)) {
-        res.status(200).json({ authToken: foundUser.signToken() })
+      if (foundUser && foundUser.validatePassword(password)) {
+        res.json({ authToken: foundUser.signToken() })
       }
       else {
         res.status(401).json({ errorMessages: ['Usuario o contraseña incorrectos'] })
