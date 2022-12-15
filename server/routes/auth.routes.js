@@ -36,7 +36,7 @@ router.post('/login', (req, res, next) => {
   User
     .findOne({ email })
     .then(foundUser => {
-      if (!foundUser || foundUser.validatePassword(password)) {
+      if (foundUser && foundUser.validatePassword(password)) {
         res.status(200).json({ authToken: foundUser.signToken() })
       }
       else {
